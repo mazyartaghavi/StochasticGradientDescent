@@ -1,0 +1,42 @@
+import numpy as np
+
+def stochastic_gradient_descent(X, y, learning_rate, num_epochs, batch_size):
+    num_examples, num_features = X.shape
+    theta = np.zeros(num_features)  # Initialize theta with zeros
+
+    for _ in range(num_epochs):
+        # Randomly shuffle the data
+        indices = np.random.permutation(num_examples)
+        X = X[indices]
+        y = y[indices]
+
+        for i in range(0, num_examples, batch_size):
+            # Select a mini-batch
+            X_batch = X[i:i+batch_size]
+            y_batch = y[i:i+batch_size]
+
+            # Calculate predictions
+            predictions = np.dot(X_batch, theta)
+
+            # Calculate the error
+            error = predictions - y_batch
+
+            # Calculate the gradient
+            gradient = np.dot(X_batch.T, error) / batch_size
+
+            # Update theta
+            theta -= learning_rate * gradient
+
+    return theta
+
+# Example usage
+# Assume we have a dataset X and corresponding labels y
+X = np.array([[1, 2], [3, 4], [5, 6]])
+y = np.array([3, 6, 9])
+
+learning_rate = 0.01
+num_epochs = 1000
+batch_size = 2
+
+theta = stochastic_gradient_descent(X, y, learning_rate, num_epochs, batch_size)
+print("Theta:", theta)
